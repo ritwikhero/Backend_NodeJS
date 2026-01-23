@@ -41,4 +41,16 @@ app.post("/", (req, res) => {
   res.json({ message: "done" });
 });
 
+app.put("/", (req, res) => {
+  for (let i = 0; i < users[0].kidney.length; i++) {
+    users[0].kidney[i].healthy = false;
+  }
+  res.json({ message: "done" });
+});
+
+app.delete("/", (req, res) => {
+  users[0].kidney.pop();
+  res.json({ message: "done" });
+});
+
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
