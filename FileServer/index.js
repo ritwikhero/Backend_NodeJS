@@ -28,6 +28,27 @@ app.get("/files", async (req, res) => {
   }
 });
 
+app.get("/file/:filename", async (req, res) => {
+  try {
+    const filename = req.params.filename;
+
+    if (filename.includes("..") || filename.includes("/")) {
+      return res.status(400).send("Invalid filename");
+    }
+
+    const filePath = path.join(__dirname, "someStuff", filename);
+    const data = await fs.readFile(filePath, "utf-8");
+    res.send(data);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.status(404).send("File not found");
+    } else {
+      console.error(error);
+      res.status(500).send("Internal server error");
+    }
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
