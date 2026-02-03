@@ -1,0 +1,52 @@
+[
+  {
+    "id": "todo_1",
+    "title": "Learn JavaScript Basics",
+    "description": "Revise variables, data types, loops, and functions."
+  },
+  {
+    "id": "todo_2",
+    "title": "Practice DSA",
+    "description": "Solve 5 array problems on LeetCode."
+  },
+  {
+    "id": "todo_3",
+    "title": "Build Todo App",
+    "description": "Create a simple CRUD todo app using React."
+  },
+  {
+    "id": "todo_4",
+    "title": "Read System Design",
+    "description": "Study caching strategies and load balancing."
+  },
+  {
+    "id": "todo_5",
+    "title": "Workout",
+    "description": "Do 30 minutes of physiotherapy exercises."
+  },
+  {
+    "id": "todo_6",
+    "title": "Learn Git",
+    "description": "Understand branching, merging, and rebasing."
+  },
+  {
+    "id": "todo_7",
+    "title": "Backend Practice",
+    "description": "Build REST APIs using Node.js and Express."
+  },
+  {
+    "id": "todo_8",
+    "title": "Database Revision",
+    "description": "Revise SQL joins and indexes."
+  },
+  {
+    "id": "todo_9",
+    "title": "DevOps Basics",
+    "description": "Learn Docker fundamentals and commands."
+  },
+  {
+    "id": "todo_10",
+    "title": "Mock Interview",
+    "description": "Take one frontend mock interview."
+  }
+]

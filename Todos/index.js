@@ -41,9 +41,38 @@
  */
 const express = require("express");
 const bodyParser = require("body-parser");
+const todos = require("./todos.json");
 
 const app = express();
+const PORT = 3000;
 
 app.use(bodyParser.json());
+
+app.get("/todos", (req, res) => {
+  try {
+    res.send(todos).status(200);
+  } catch (error) {
+    console.log(error);
+    res.send(error).status(500);
+  }
+});
+
+app.get("/todo/:id", (req, res) => {
+  const id = req.params.id;
+  try {
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) {
+      return res.status(404).send("Todo not found");
+    }
+    res.send(todo).status(200);
+  } catch (error) {
+    console.log(error);
+    res.send(error).status(500);
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
