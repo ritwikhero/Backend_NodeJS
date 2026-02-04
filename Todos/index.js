@@ -39,6 +39,7 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
+const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const todos = require("./todos.json");
@@ -68,6 +69,52 @@ app.get("/todo/:id", (req, res) => {
   } catch (error) {
     console.log(error);
     res.send(error).status(500);
+  }
+});
+
+app.post("/todos", (req, res) => {
+  const body = req.body;
+  try {
+    const todo = {
+      id: Date.now().toString(),
+      title: body.title,
+      description: body.description,
+      completed: body.completed || false,
+    };
+    todos.push(todo);
+    res.status(201).send(todo);
+    fs.writeFileSync("todos.json", JSON.stringify(todos, null, 2));
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+app.put("/todos/:id", (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  try {
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) {
+      res.status(404).send("Todo not found");
+    }
+
+    // const updatedTodo = {
+    //   ...todo,
+    //   title: body.title,
+    //   description: body.description,
+    //   completed: body.completed,
+    // };
+
+    todo.title = body.title ?? todo.title;
+    todo.description = body.description ?? todo.description;
+    todo.completed = body.completed ?? todo.completed;
+
+    res.status(200).send(todo);
+    fs.writeFileSync("todos.json", JSON.stringify(todos, null, 2));
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
   }
 });
 
