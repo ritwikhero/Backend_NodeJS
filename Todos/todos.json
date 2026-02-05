@@ -1,10 +1,5 @@
 [
   {
-    "id": "todo_1",
-    "title": "Learn JavaScript Basics",
-    "description": "Revise variables, data types, loops, and functions."
-  },
-  {
     "id": "todo_2",
     "title": "Practice DSA",
     "description": "Solve 5 array problems on LeetCode."
@@ -54,11 +49,5 @@
     "title": "go ghar",
     "description": "ghar jaa bhai",
     "completed": false
-  },
-  {
-    "id": "1770148307193",
-    "title": "go gym",
-    "description": "gym jaa bhai",
-    "completed": true
   }
 ]

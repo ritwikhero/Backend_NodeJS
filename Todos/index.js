@@ -118,8 +118,40 @@ app.put("/todos/:id", (req, res) => {
   }
 });
 
+app.delete("/todos/:id", (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const todo = todos.find((todo) => todo.id === id);
+
+    if (!todo) {
+      return res.status(404).send("Todo not found");
+    }
+
+    todos.splice(todos.indexOf(todo), 1);
+    res.status(200).send("Todo deleted");
+    fs.writeFileSync("todos.json", JSON.stringify(todos, null, 2));
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// {
+//   "id": "todo_1",
+//   "title": "Learn JavaScript Basics",
+//   "description": "Revise variables, data types, loops, and functions."
+// }
+
+// {
+//   "id": "1770148307193",
+//   "title": "go gym",
+//   "description": "gym jaa bhai",
+//   "completed": true
+// }
 
 module.exports = app;
