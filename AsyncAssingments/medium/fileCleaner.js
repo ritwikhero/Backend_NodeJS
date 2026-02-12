@@ -26,7 +26,7 @@ const fs = require("fs/promises");
 async function cleanFile(filePath) {
   let content = await fs.readFile(filePath, "utf8");
   let cleanedContent = content.split(/\s+/).join(" ");
-  await fs.writeFile(filePath, cleanedContent);
+  await fs.appendFile(filePath, `\n\nCleaned:\n${cleanedContent}`);
   console.log("File cleaned successfully!");
 }
 
