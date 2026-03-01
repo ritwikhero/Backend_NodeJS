@@ -44,6 +44,18 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
   // Implement course purchase logic
   const courseId = req.params.courseId;
   const username = req.headers.username;
+  const password = req.headers.password;
+
+  const userExists = await User.findOne({
+    username: username,
+    password: password,
+  });
+
+  if (!userExists) {
+    return res.status(400).json({
+      msg: "User doesnt exist",
+    });
+  }
 
   await User.updateOne(
     {
