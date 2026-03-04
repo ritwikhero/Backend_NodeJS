@@ -69,8 +69,18 @@ router.post("/courses", adminMiddleware, async (req, res) => {
   });
 });
 
-router.get("/courses", adminMiddleware, (req, res) => {
+router.get("/courses", adminMiddleware, async (req, res) => {
   // Implement fetching all courses logic
+  try {
+    const courses = await Course.find({});
+    return res.status(200).json({
+      courses,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
 });
 
 module.exports = router;
