@@ -1,12 +1,12 @@
 const express = require("express");
-
+const bodyParser = require("body-parser");
 const app = express();
-
+const userRouter = require("./routes/user");
 const PORT = 3000;
 
-app.use(express.json());
+app.use(bodyParser.json());
 
-// app.use("/api", require("/routes/user"));
+app.use("/api/user", userRouter);
 // app.use("/api", require("/routes/user"));
 
 app.listen(PORT, () => {
