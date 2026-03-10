@@ -43,4 +43,9 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.post("signin", async (req, res) => {
+  try {
+  } catch (error) {}
+});
+
 module.exports = router;
