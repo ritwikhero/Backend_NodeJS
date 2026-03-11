@@ -43,9 +43,34 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.post("signin", async (req, res) => {
+router.post("/signin", async (req, res) => {
   try {
-  } catch (error) {}
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const existingUser = await User.findOne({
+      username,
+      password,
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const token = jwt.sign({ username, password }, jwtPassword);
+
+    return res.status(200).json({
+      message: "User signed in successfully",
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 module.exports = router;
