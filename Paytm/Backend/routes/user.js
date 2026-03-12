@@ -4,10 +4,18 @@ const userMiddleware = require("../middleware/user");
 const { User } = require("../db/db");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const zod = require("zod");
 dotenv.config();
 const jwtPassword = process.env.JWT_SECRET;
 
 //User routes
+
+const signupBody = zod.object({
+  username: zod.email(),
+  password: zod.string(),
+  firstName: zod.string(),
+  lastName: zod.string(),
+});
 
 router.post("/signup", async (req, res) => {
   try {
