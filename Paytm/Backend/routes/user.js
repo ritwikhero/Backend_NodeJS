@@ -17,12 +17,30 @@ const signupBody = zod.object({
   lastName: zod.string(),
 });
 
+const signinBody = zod.object({
+  username: zod.email(),
+  password: zod.string(),
+});
+
 router.post("/signup", async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
+
+    const { success } = signupBody.safeParse({
+      username,
+      password,
+      firstName,
+      lastName,
+    });
+
+    if (!success) {
+      return res.status(411).json({
+        message: "Invalid inputs",
+      });
+    }
 
     const existingUser = await User.findOne({
       username,
@@ -33,15 +51,19 @@ router.post("/signup", async (req, res) => {
         message: "User already exists",
       });
     }
-    await User.create({
+    const user = await User.create({
       username,
       password,
       firstName,
       lastName,
     });
 
+    const userId = user._id;
+    const token = jwt.sign({ userId }, jwtPassword);
+
     return res.status(200).json({
       message: "User created successfully",
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -56,6 +78,17 @@ router.post("/signin", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    const { success } = signinBody.safeParse({
+      username,
+      password,
+    });
+
+    if (!success) {
+      return res.status(411).json({
+        message: "Invalid inputs",
+      });
+    }
+
     const existingUser = await User.findOne({
       username,
       password,
@@ -66,8 +99,8 @@ router.post("/signin", async (req, res) => {
         message: "User not found",
       });
     }
-
-    const token = jwt.sign({ username, password }, jwtPassword);
+    const userId = existingUser._id;
+    const token = jwt.sign({ userId }, jwtPassword);
 
     return res.status(200).json({
       message: "User signed in successfully",
