@@ -22,6 +22,12 @@ const signinBody = zod.object({
   password: zod.string(),
 });
 
+const updateBody = zod.object({
+  password: zod.string().optional(),
+  firstName: zod.string().optional(),
+  lastName: zod.string().optional(),
+});
+
 router.post("/signup", async (req, res) => {
   try {
     const username = req.body.username;
@@ -105,6 +111,41 @@ router.post("/signin", async (req, res) => {
     return res.status(200).json({
       message: "User signed in successfully",
       token,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+router.put("/update", userMiddleware, async (req, res) => {
+  try {
+    const { success } = updateBody.safeParse(req.body);
+
+    if (!success) {
+      return res.status(411).json({
+        message: "Invalid inputs",
+      });
+    }
+
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        message: "No fields to update",
+      });
+    }
+
+    await User.updateOne(
+      {
+        _id: req.userId,
+      },
+      {
+        $set: req.body,
+      },
+    );
+    return res.status(200).json({
+      message: "User updated successfully",
     });
   } catch (error) {
     console.log(error);

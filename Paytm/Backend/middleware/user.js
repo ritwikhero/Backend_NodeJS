@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User } = require("../db/db");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -14,7 +14,7 @@ async function userMiddleware(req, res, next) {
       });
     }
 
-    const token = authorization.split("")[1];
+    const token = authHeader.split(" ")[1];
     const decode = jwt.verify(token, jwtPassword);
 
     req.userId = decode.userId;
