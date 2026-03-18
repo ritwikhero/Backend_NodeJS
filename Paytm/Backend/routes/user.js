@@ -155,4 +155,9 @@ router.put("/update", userMiddleware, async (req, res) => {
   }
 });
 
+router.get("/search", userMiddleware, async (req, res) => {
+  try {
+  } catch (error) {}
+});
+
 module.exports = router;
