@@ -157,7 +157,27 @@ router.put("/update", userMiddleware, async (req, res) => {
 
 router.get("/search", userMiddleware, async (req, res) => {
   try {
-  } catch (error) {}
+    const { name } = req.query;
+    const user = await User.findOne({
+      firstName: name,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "User found",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 module.exports = router;
