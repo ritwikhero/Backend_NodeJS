@@ -157,20 +157,36 @@ router.put("/update", userMiddleware, async (req, res) => {
 
 router.get("/search", userMiddleware, async (req, res) => {
   try {
-    const { name } = req.query;
-    const user = await User.findOne({
-      firstName: name,
+    const { filter } = req.query;
+    if (!filter) {
+      return res.status(400).json({
+        message: "Name is required",
+      });
+    }
+
+    const name = new RegExp(filter, "i");
+    const users = await User.find({
+      $or: [
+        { firstName: { $regex: name } },
+        { lastName: { $regex: name } },
+        { username: { $regex: name } },
+      ],
     });
 
-    if (!user) {
+    if (users.length === 0) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
     return res.status(200).json({
-      message: "User found",
-      user,
+      message: "Users found successfully",
+      user: users.map((user) => ({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+      })),
     });
   } catch (error) {
     console.log(error);
