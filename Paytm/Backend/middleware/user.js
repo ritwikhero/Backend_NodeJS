@@ -26,5 +26,18 @@ async function userMiddleware(req, res, next) {
   }
 }
 // have to add apis for transcations
+// const mongoose = require('mongoose');
+// const Account = require('./path-to-your-account-model');
+
+// const transferFunds = async (fromAccountId, toAccountId, amount) => {
+//     // Decrement the balance of the fromAccount
+// 	  await Account.findByIdAndUpdate(fromAccountId, { $inc: { balance: -amount } });
+
+//     // Increment the balance of the toAccount
+//     await Account.findByIdAndUpdate(toAccountId, { $inc: { balance: amount } });
+// }
+
+// // Example usage
+// transferFunds('fromAccountID', 'toAccountID', 100);
 
 module.exports = userMiddleware;
