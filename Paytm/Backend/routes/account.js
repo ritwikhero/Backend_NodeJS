@@ -31,4 +31,14 @@ router.get("/balance", userMiddleware, async (req, res) => {
   }
 });
 
+router.post("/transfer", userMiddleware, async(req,res) =>{
+    try {
+        
+        const 
+
+    } catch (error) {
+        
+    }
+});
+
 module.exports = router;
