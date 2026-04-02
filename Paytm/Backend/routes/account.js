@@ -31,14 +31,62 @@ router.get("/balance", userMiddleware, async (req, res) => {
   }
 });
 
-router.post("/transfer", userMiddleware, async(req,res) =>{
-    try {
-        
-        const 
+//without transaction
+router.post("/transfer", userMiddleware, async (req, res) => {
+  try {
+    const { amount, to } = req.body;
 
-    } catch (error) {
-        
+    const account = await Account.findOne({
+      userId: req.userId,
+    });
+
+    if (amount > account.balance) {
+      return res.status(400).json({
+        message: "Insufficient balance",
+      });
     }
+
+    const toAccount = await Account.findOne({
+      userId: to,
+    });
+
+    if (!toAccount) {
+      return res.status(404).json({
+        message: "Receiver account not found",
+      });
+    }
+
+    await Account.updateOne(
+      {
+        userId: req.userId,
+      },
+      {
+        $inc: {
+          balance: -amount,
+        },
+      },
+    );
+
+    await Account.updateOne(
+      {
+        userId: to,
+      },
+      {
+        $inc: {
+          balance: amount,
+        },
+      },
+    );
+
+    return res.status(200).json({
+      message: "Transfer successful",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 });
 
 module.exports = router;
