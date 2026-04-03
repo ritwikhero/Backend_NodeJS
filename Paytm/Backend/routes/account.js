@@ -89,4 +89,6 @@ router.post("/transfer", userMiddleware, async (req, res) => {
   }
 });
 
+//optimal way using transaction
+
 module.exports = router;
