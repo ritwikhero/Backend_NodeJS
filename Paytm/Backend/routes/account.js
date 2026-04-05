@@ -92,6 +92,65 @@ router.get("/balance", userMiddleware, async (req, res) => {
 //optimal way using transaction
 router.post("/transfer", userMiddleware, async (req, res) => {
   try {
-    const { amount, to } = req.body;
+    const session = await mongoose.startSession();
+
+    session.startTransaction();
+    const { amoubt, to } = req.body;
+
+    const account = await Account.findOne({
+      userId: req.userId,
+    }).sessiion(session);
+
+    if (!account || account.balance < amount) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({
+        message: "Insufficient balance",
+      });
+    }
+
+    const toAccount = await Account.findOne({
+      userId: to,
+    }).session(session);
+
+    if (!toAccount) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({
+        message: "Receiver account not found",
+      });
+    }
+
+    await Account.updateOne(
+      { userId: req.userId },
+      {
+        $inc: {
+          balance: -amount,
+        },
+      },
+    ).sessiion(session);
+
+    await Account.updateOne(
+      { userId: to },
+      {
+        $inc: {
+          balance: amount,
+        },
+      },
+    ).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      message: "Transfer successful",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
 
 module.exports = router;
